@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title if title else "Warehouse Management" }}</title>
+    <!-- Basic styling using a lightweight CSS framework (Milligram) for neatness -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css" integrity="sha512-nu9uzxhpcJn/GrNqxabWWMwBLT/gRghOAqxCLv7saEh1PQuLzpTnt324j6nU5zTh+VqxGNzcRCjSc5vNmiDoVg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body { margin: 20px; }
+        nav { margin-bottom: 20px; }
+        .flash-success { color: green; }
+        .flash-error { color: red; }
+    </style>
+</head>
+<body>
+<nav>
+    {% if session.user %}
+        <strong>Logged in as {{ session.user.name }}</strong>
+        <span style="float:right">
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </span>
+        <br/>
+        {% if session.user.role == 'employee' %}
+            <a href="{{ url_for('employee_dashboard') }}">Dashboard</a> |
+            <a href="{{ url_for('employee_products') }}">Products</a> |
+            <a href="{{ url_for('employee_profile') }}">Profile</a>
+        {% elif session.user.role == 'supervisor' %}
+            <a href="{{ url_for('supervisor_dashboard') }}">Dashboard</a> |
+            <a href="{{ url_for('employee_products') }}">Products</a> |
+            <a href="{{ url_for('supervisor_list_employees') }}">Employees</a> |
+            <a href="{{ url_for('supervisor_statistics') }}">Statistics</a>
+        {% elif session.user.role == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
+            <a href="{{ url_for('admin_list_units') }}">Units</a> |
+            <a href="{{ url_for('admin_list_supervisors') }}">Supervisors</a> |
+            <a href="{{ url_for('admin_list_products') }}">Products</a>
+        {% endif %}
+        |
+        <a href="{{ url_for(session.user.role + '_change_password') }}">Change Password</a>
+    {% endif %}
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+    {% for category, message in messages %}
+        <li class="flash-{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Login</h2>
+<form method="post">
+    <label for="role">Role:</label>
+    <select id="role" name="role" required>
+        <option value="">Select role</option>
+        <option value="admin">Admin</option>
+        <option value="supervisor">Supervisor</option>
+        <option value="employee">Employee</option>
+    </select>
+    <label for="unit_id">Unit ID (for Supervisor/Employee)</label>
+    <input type="number" id="unit_id" name="unit_id" placeholder="e.g. 1">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+    <button type="submit">Login</button>
+</form>
+{% endblock %}
